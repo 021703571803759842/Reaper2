@@ -9,11 +9,11 @@ class LessonInline(admin.StackedInline):
     model = Lesson
     extra = 5
 
-class QuestionInline(admin.ModelAdmin):
+class QuestionInline(admin.StackedInline):
     model = Question
     extra= 5
 
-class ChoiceInline(admin.ModelAdmin):
+class ChoiceInline(admin.StackedInline):
     model = Choice
     extra= 5
 
