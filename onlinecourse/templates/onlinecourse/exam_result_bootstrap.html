@@ -65,22 +65,15 @@
            </div>
            {% endfor %}
        </div>
-   </div>
-   </body>
-</html>
-
-
-<!--    </div>
-        {% else %}
+    </div>
+    {% else %}
         <div class="alert alert-danger">
-            HINT Display failed info 
+             <!-- HINT Display failed info--> 
         </div>
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
-        {% endif %}
-        <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            HINT Display exam results
-        </div>
-    </div>
-</body>
-</html> -->
+    {% endif %}
+    <div class="card-columns-vertical mt-1">
+    <h5 class="">Exam results</h5>
+        <!-- HINT Display exam results -->
+   </body>
+</html>
