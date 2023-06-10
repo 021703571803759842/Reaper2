@@ -30,9 +30,10 @@ class LessonAdmin(admin.ModelAdmin):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
+    list_display = ['content']
 
 class ChoiceAdmin(admin.ModelAdmin):
-    list_display = ['choice_text']
+    list_display = ['content']
 
 # <HINT> Register Question and Choice models here
 

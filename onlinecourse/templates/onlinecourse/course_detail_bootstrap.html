@@ -55,46 +55,37 @@
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
 
             <a href="#exam" data-toggle="collapse">Start Exam</a>
-            
-
-            <!-- <HINT> If user is authenticated, show course exam with a list of question -->
-            <div id="exam" class="collapse">
-                {% if user.is_authenticated %}
-                    <p> exam </p>
-                {% else %}
-                    <p> User is not authenticated </p>
-                {% endif %}
-            </div>
-            
-            <!-- <HINT> Each example will have many questions -->
-
-            <!-- <HINT> Each question will have many choices -->
-
-
-            <!-- <HINT> Create a form to collect the selected choices for all questions -->
-            <!-- <HINT> For each question choice, you may create a checkbox input like
-            <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
-            -->
-
-            <!-- A choice submission form example -->
-            <form id="questionform" action="point to a submit view" method="post">
-                        ... for each question in the course ...
+            {% if user.is_authenticated %}
+                </br>
+                <button class="btn btn-primary btn-block" data-toggle="collapse" data-target="#exam">Start Exam</button>
+                <div id="exam" class="collapse">
+                    <form id="questionform" action="{% url 'onlinecourse:submit' course.id %}" method="POST">
+                        {% for question in course.question_set.all %}
                         <div class="card mt-1">
-                            <div class="card-header"><h5>{{ question.question_text}}</h5></div>
-                            {% csrf_token %}
-                            <div class="form-group">
-                               ... for each choice in the question ...
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" name="choice_{{choice.id}}"
-                                               class="form-check-input" id="{{choice.id}}"
-                                               value="{{choice.id}}">{{ choice.choice_text }}
-                                    </label>
+                            <div class="card-header"><h5>{{ question.content }}</h5></div>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% for choice in question.choice_set.all %}
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" name="choice_{{choice.id}}"
+                                                    class="form-check-input" id="{{choice.id}}"
+                                                    value="{{choice.id}}">{{ choice.content }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                    <input class="btn btn-success btn-block" type="submit" value="Submit">
-            </form> 
+                            {% endfor %}
+                        <input class="btn btn-success btn-block" type="submit" value="Submit">
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            </body>
+            </html>
+
+           
 
             <!--Check here to see more details Bootstrap checkbox
              https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->

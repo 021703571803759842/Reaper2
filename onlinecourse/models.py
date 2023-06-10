@@ -106,7 +106,7 @@ class Question(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     # question text
-    question_text = models.CharField(max_length=200, default="title")
+    content = models.CharField(max_length=200, default="title")
     # question grade/mark
     grade = models.IntegerField(default=0)
 
@@ -128,7 +128,7 @@ class Question(models.Model):
     # Other fields and methods you would like to design
 class Choice(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200, default="choice")
+    content = models.CharField(max_length=200, default="choice")
     is_correct = models.BooleanField()
 
 # <HINT> The submission model
