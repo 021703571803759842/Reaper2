@@ -130,7 +130,7 @@ def enroll(request, course_id):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-def submit(request, course_id):
+def submit(request, course_id, lesson_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
     enrollment = Enrollment.objects.get(user=user, course=course)
@@ -138,7 +138,7 @@ def submit(request, course_id):
     choices = extract_answers(request)
     submission.choices.set(choices)
     submission_id = submission.id
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, submission_id,)))
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, lesson_id, submission_id)))
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
 
