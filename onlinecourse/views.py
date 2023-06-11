@@ -152,18 +152,37 @@ def extract_answers(request):
 
 
 
-def show_exam_result(request, course_id, submission_id):
+def show_exam_result(request, course_id, lesson_id, submission_id):
     context = {}
     course = get_object_or_404(Course, pk=course_id)
+    lesson = get_object_or_404(Lesson, pk=lesson_id)
+    questions = Question.objects.filter(lesson = lesson)
     submission = Submission.objects.get(id=submission_id)
-    choices = submission.choices.all()
+    choice_set = submission.choices.all()
+    count = questions.count()
+
+    question_ids = []
+    score = 0
     total_score = 0
-    for choice in choices:
-        if choice.is_correct:
-            total_score += choice.question.grade
+    for choice in choice_set:
+        question_ids.append(choice.question.id)
+    
+    question_ids = [*set(question_ids)]
+
+    for question in question_ids:
+        current_question = Question.objects.get(id = question)
+        choices = choice_set.filter(question=current_question)
+        if current_question.is_get_score(choices):
+            score += current_question.mark
+        
+    total_score = round((score/count)*100,2)
+        
+        #if choice.is_correct:
+#            total_score += choice.question.grade 
     context['course'] = course
+    context['lesson'] = lesson
     context['grade'] = total_score
-    context['choices'] = choices
+    context['choices'] = choice_set
 
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
