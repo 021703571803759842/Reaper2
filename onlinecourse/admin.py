@@ -31,7 +31,7 @@ class LessonAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
     list_display = ['content']
-    fields = ('content', 'grade', 'course', 'lesson_id')
+    fields = ('content', 'grade', 'course', 'lesson')
 
 class ChoiceAdmin(admin.ModelAdmin):
     list_display = ['content']

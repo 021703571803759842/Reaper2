@@ -104,7 +104,7 @@ class Enrollment(models.Model):
 class Question(models.Model):
     # Foreign key to lesson
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     #lesson = Lesson.title
     # question text
     content = models.TextField(max_length=200, default="title")
