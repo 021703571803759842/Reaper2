@@ -130,7 +130,7 @@ def enroll(request, course_id):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-def submit(request, course_id, lesson_id):
+def submit(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
     enrollment = Enrollment.objects.get(user=user, course=course)
@@ -138,7 +138,7 @@ def submit(request, course_id, lesson_id):
     choices = extract_answers(request)
     submission.choices.set(choices)
     submission_id = submission.id
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, lesson_id, submission_id)))
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, submission_id)))
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
 
@@ -152,37 +152,49 @@ def extract_answers(request):
 
 
 
-def show_exam_result(request, course_id, lesson_id, submission_id):
-    context = {}
-    course = get_object_or_404(Course, pk=course_id)
-    lesson = get_object_or_404(Lesson, pk=lesson_id)
-    questions = Question.objects.filter(lesson = lesson)
-    submission = Submission.objects.get(id=submission_id)
-    choice_set = submission.choices.all()
-    count = questions.count()
+def show_exam_result(request, course_id, submission_id):
+    #context = {}
+    #course = get_object_or_404(Course, pk=course_id)
+    #lesson = get_object_or_404(Lesson, pk=lesson_id)
+    #questions = Question.objects.filter(lesson = lesson)
+    #submission = Submission.objects.get(id=submission_id)
+    #choice_set = submission.choices.all()
+    #count = questions.count()
 
-    question_ids = []
-    score = 0
-    total_score = 0
-    for choice in choice_set:
-        question_ids.append(choice.question.id)
+    #question_ids = []
+    #score = 0
+    #total_score = 0
+    #for choice in choice_set:
+    #    question_ids.append(choice.question.id)
     
-    question_ids = [*set(question_ids)]
+    #question_ids = [*set(question_ids)]
 
-    for question in question_ids:
-        current_question = Question.objects.get(id = question)
-        choices = choice_set.filter(question=current_question)
-        if current_question.is_get_score(choices):
-            score += current_question.mark
+    #for question in question_ids:
+    #    current_question = Question.objects.get(id = question)
+    #    choices = choice_set.filter(question=current_question)
+    #    if current_question.is_get_score(choices):
+    #        score += current_question.mark
         
-    total_score = round((score/count)*100,2)
+    #total_score = round((score/count)*100,2) 
         
         #if choice.is_correct:
 #            total_score += choice.question.grade 
+   #context['course'] = course
+    #context['lesson'] = lesson
+    #context['grade'] = total_score
+    #context['choices'] = choice_set
+
+    context = {}
+    course = get_object_or_404(Course, pk=course_id)
+    submission = Submission.objects.get(id=submission_id)
+    choices = submission.choices.all()
+    total_score = 0
+    for choice in choices:
+        if choice.is_correct:
+            total_score += int(choice.question.grade)
     context['course'] = course
-    context['lesson'] = lesson
     context['grade'] = total_score
-    context['choices'] = choice_set
+    context['choices'] = choices
 
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
